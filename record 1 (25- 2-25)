@@ -255,4 +255,5 @@ mysql> DESC PERSON;
  mysql> DROP TABLE STUDENT1;
 Query OK, 0 rows affected (0.82 sec)
 
-
+//RESUBMIT
+//INVOICE+ITEM PK??
