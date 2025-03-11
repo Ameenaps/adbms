@@ -1,0 +1,178 @@
+a) TCL COMMANDS
+
+
+          1.    Commit
+          2.    Rollback
+          3.    Savepoint
+          
+ans1)mysql> set autocommit=off;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from MARK1 where roll=3;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from MARK1;
++------+-------+-------+-------+-------+
+| roll | mark1 | mark2 | mark3 | grade |
++------+-------+-------+-------+-------+
+|    1 |    25 |    35 |    45 | A     |
+|    2 |    20 |    30 |    40 | B     |
+|    4 |    26 |    55 |    45 | D     |
++------+-------+-------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> delete from MARK1 where roll=2;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from MARK1;
++------+-------+-------+-------+-------+
+| roll | mark1 | mark2 | mark3 | grade |
++------+-------+-------+-------+-------+
+|    1 |    25 |    35 |    45 | A     |
+|    3 |    26 |    65 |    55 | C     |
+|    4 |    26 |    55 |    45 | D     |
++------+-------+-------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.50 sec)
+
+ans2)mysql> delete from MARK1 where roll=3;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from MARK1;
++------+-------+-------+-------+-------+
+| roll | mark1 | mark2 | mark3 | grade |
++------+-------+-------+-------+-------+
+|    1 |    25 |    35 |    45 | A     |
+|    2 |    20 |    30 |    40 | B     |
+|    4 |    26 |    55 |    45 | D     |
++------+-------+-------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from MARK1;
++------+-------+-------+-------+-------+
+| roll | mark1 | mark2 | mark3 | grade |
++------+-------+-------+-------+-------+
+|    1 |    25 |    35 |    45 | A     |
+|    2 |    20 |    30 |    40 | B     |
+|    3 |    26 |    65 |    55 | C     |
+|    4 |    26 |    55 |    45 | D     |
++------+-------+-------+-------+-------+
+4 rows in set (0.00 sec)
+
+ans3)mysql> select * from MARK1;
++------+-------+-------+-------+-------+
+| roll | mark1 | mark2 | mark3 | grade |
++------+-------+-------+-------+-------+
+|    1 |    25 |    35 |    45 | A     |
+|    3 |    26 |    65 |    55 | C     |
+|    4 |    26 |    55 |    45 | D     |
++------+-------+-------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into MARK1 values(5,35,40,20,'E');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint s1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into MARK1 values(6,36,41,21,'F');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint s2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into MARK1 values(7,37,42,22,'G');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint s3;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from MARK1;
++------+-------+-------+-------+-------+
+| roll | mark1 | mark2 | mark3 | grade |
++------+-------+-------+-------+-------+
+|    1 |    25 |    35 |    45 | A     |
+|    3 |    26 |    65 |    55 | C     |
+|    4 |    26 |    55 |    45 | D     |
+|    5 |    35 |    40 |    20 | E     |
+|    6 |    36 |    41 |    21 | F     |
+|    7 |    37 |    42 |    22 | G     |
++------+-------+-------+-------+-------+
+6 rows in set (0.00 sec)
+
+mysql> rollback to s2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from MARK1;
++------+-------+-------+-------+-------+
+| roll | mark1 | mark2 | mark3 | grade |
++------+-------+-------+-------+-------+
+|    1 |    25 |    35 |    45 | A     |
+|    3 |    26 |    65 |    55 | C     |
+|    4 |    26 |    55 |    45 | D     |
+|    5 |    35 |    40 |    20 | E     |
+|    6 |    36 |    41 |    21 | F     |
++------+-------+-------+-------+-------+
+5 rows in set (0.00 sec)
+
+                  
+b) DCL COMMAND
+ Create two users user1, user2
+
+1.              GRANT
+
+Give insert and select privilege to user 1 on customer table in the invoice database.
+
+ans1)mysql> use INVOICE;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> create user ABC@'localhost' identified by 'abc123';
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> grant insert,select on Customer to ABC@'localhost';
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> show grants  for ABC@'localhost';
++-------------------------------------------------------------------+
+| Grants for ABC@localhost                                          |
++-------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `ABC`@`localhost`                           |
+| GRANT SELECT, INSERT ON `INVOICE`.`Customer` TO `ABC`@`localhost` |
++-------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+ans2)mysql> create user ABCD@'localhost' identified by 'Abcd@123';
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> grant  update,delete on  INVOICE.* TO ABCD@'localhost';
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> show grants  for ABCD@'localhost';
++-----------------------------------------------------------+
+| Grants for ABCD@localhost                                 |
++-----------------------------------------------------------+
+| GRANT USAGE ON *.* TO `ABCD`@`localhost`                  |
+| GRANT UPDATE, DELETE ON `INVOICE`.* TO `ABCD`@`localhost` |
++-----------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+ans3)mysql> revoke delete on INVOICE.* from ABCD@'localhost';
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> show grants for ABCD@'localhost';
++---------------------------------------------------+
+| Grants for ABCD@localhost                         |
++---------------------------------------------------+
+| GRANT USAGE ON *.* TO `ABCD`@`localhost`          |
+| GRANT UPDATE ON `INVOICE`.* TO `ABCD`@`localhost` |
++---------------------------------------------------+
+2 rows in set (0.00 sec)
+
+
