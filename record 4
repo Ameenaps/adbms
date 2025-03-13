@@ -1,0 +1,179 @@
+a) ACCESSING DATABASE:  (SELECT, Filtering using WHERE, ORDER BY Clauses)
+
+1.    List all invoice items, avoid duplicates.
+2.    List the invoice details from 1st January 2024 to 31st march 2024
+3.    List the customer details who not live in ‘tvm’.
+4.    List the customers who have no phone number.
+5.    Display customer names in descending order.
+6.    Display the customer details sorted in ascending by city and descending by names.
+7.    Find the customer names who have ‘e’ or ‘a’ in them and at least 3 characters in length
+8.    List the names of customers their names have ‘m’ in second position.
+
+ans1)mysql> select * from Invoice_item;
++--------+-------+----------+
+| inv_id | pid   | quantity |
++--------+-------+----------+
+|    101 | 20000 |        4 |
+|    102 | 20001 |        1 |
+|    103 | 20002 |        3 |
+|    104 | 20003 |        2 |
+|    104 | 20002 |        5 |
++--------+-------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select distinct inv_id from Invoice_item;
++--------+
+| inv_id |
++--------+
+|    101 |
+|    102 |
+|    103 |
+|    104 |
++--------+
+
+ans2)mysql> select  * from Invoice_master where inv_date between '2024-01-01' and '2024-03-31' ;
++--------+---------+------------+
+| inv_id | cust_id | inv_date   |
++--------+---------+------------+
+|    105 |   10003 | 2024-01-01 |
++--------+---------+------------+
+1 row in set (0.00 sec)
+
+ans3)mysql> select * from Customer where city <> 'tvm';
++-------+--------+------------+----------+-----------+
+| id    | name   | address    | city     | ph_no     |
++-------+--------+------------+----------+-----------+
+| 10000 | ameena | ekm        | kochi    | 542845697 |
+| 10001 | amrith | edappally  | kakkanad |      NULL |
+| 10002 | aysha  | koduvally  | calicut  |      NULL |
+| 10003 | jovina | ottapalam  | palakkad | 548741554 |
+| 10004 | linto  | thalassery | kannur   | 947257412 |
++-------+--------+------------+----------+-----------+
+5 rows in set (0.00 sec)
+
+ans4)mysql> select * from Customer where ph_no is null;
++-------+--------+-----------+----------+-------+
+| id    | name   | address   | city     | ph_no |
++-------+--------+-----------+----------+-------+
+| 10001 | amrith | edappally | kakkanad |  NULL |
+| 10002 | aysha  | koduvally | calicut  |  NULL |
++-------+--------+-----------+----------+-------+
+2 rows in set (0.00 sec)
+
+ans5)mysql> select * from Customer order by name desc;
++-------+--------+------------+----------+-----------+
+| id    | name   | address    | city     | ph_no     |
++-------+--------+------------+----------+-----------+
+| 10004 | linto  | thalassery | kannur   | 9472
+| 10003 | jovina | ottapalam  | palakkad | 548741554 |
+| 10005 | jaseem | attingal   | tvm      | 548741554 |
+| 10002 | aysha  | koduvally  | calicut  |      NULL |
+| 10001 | amrith | edappally  | kakkanad |      NULL |
+| 10000 | ameena | ekm        | kochi    | 542845697 |
++-------+--------+------------+----------+-----------+
+6 rows in set (0.00 sec)
+
+ans6)mysql> select name,city from Customer ORDER BY city asc ,name desc;
++--------+----------+
+| name   | city     |
++--------+----------+
+| aysha  | calicut  |
+| amrith | kakkanad |
+| linto  | kannur   |
+| ameena | kochi    |
+| jovina | palakkad |
+| jaseem | tvm      |
++--------+----------+
+6 rows in set (0.00 sec)
+
+ans7)mysql> select distinct name from Customer where(name like '%e%' or name like '%a%') and length(name) >=3;
++--------+
+| name   |
++--------+
+| ameena |
+| amrith |
+| aysha  |
+| jovina |
+| jaseem |
++--------+
+5 rows in set (0.03 sec)
+
+ans8)mysql> select distinct name from Customer where(name like '_m%');
++--------+
+| name   |
++--------+
+| ameena |
+| amrith |
++--------+
+2 rows in set (0.00 sec)
+
+b) OPTIMIZING DATABASE:  (GROUP BY, AGGREGATE FUNCTIONS)
+
+1.    List product name, price except soap on price order.
+2.    Find minimum, maximum and average price of products.
+3.    Find number of customers in each city.
+4.    Find number of customers in each city, only include city with more than 3 customers.
+5. Show data as displayed ‘who, where’ Eg: ‘customer1 lives in ekm’.
+
+ans1)mysql> select name,price from Product where name !='soap' order by price;
++--------+-------+
+| name   | price |
++--------+-------+
+| pen    |    92 |
+| bag    |   102 |
+| toy    |   112 |
+| pencil |   148 |
++--------+-------+
+4 rows in set (0.00 sec)
+
+ans2)mysql> select MIN(price) as min_price,MAX(price) as max_price,AVG(price) as avg_price from Product;
++-----------+-----------+-----------+
+| min_price | max_price | avg_price |
++-----------+-----------+-----------+
+|        56 |       148 |  102.0000 |
++-----------+-----------+-----------+
+1 row in set (0.01 sec)
+
+ans3)mysql> select city, count(*) from Customer as customer_count group by city;
++----------+----------+
+| city     | count(*) |
++----------+----------+
+| kochi    |        1 |
+| kakkanad |        1 |
+| calicut  |        1 |
+| palakkad |        1 |
+| kannur   |        1 |
+| tvm      |        1 |
++----------+----------+
+6 rows in set (0.00 sec)
+
+ans4)mysql> select city, count(*) from Customer as customer_count group by city having count(*) > 3;
++-------+----------+
+| city  | count(*) |
++-------+----------+
+| kochi |        4 |
++-------+----------+
+1 row in set (0.00 sec)
+
+ans5)mysql> select CONCAT(name, ' lives in ', city) as cust_location FROM Customer;
++--------------------------+
+| cust_location            |
++--------------------------+
+| ameena lives in kochi    |
+| amrith lives in kakkanad |
+| aysha lives in calicut   |
+| jovina lives in palakkad |
+| linto lives in kannur    |
+| jaseem lives in tvm      |
+| aysha lives in kochi     |
+| aswin lives in kochi     |
+| roshan lives in kochi    |
++--------------------------+
+9 rows in set (0.01 sec)
+
+
+
+
+
+
+
