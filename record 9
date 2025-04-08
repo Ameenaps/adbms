@@ -32,3 +32,4 @@ mysql> select pid,name,price,price_range(price)
 +-------+--------+-------+--------------------+
 5 rows in set (0.03 sec)
 
+//VERIFIED
