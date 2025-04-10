@@ -1,0 +1,68 @@
+1.Create a trigger to handle updates to the customer table.
+
+mysql> create table Cust(id int,name varchar(10),address varchar(15),city varchar(10),ph_no int);
+Query OK, 0 rows affected (1.37 sec)
+
+mysql> delimiter $
+mysql> create trigger cust_trigger
+    -> after update on Customer
+    -> for each row begin
+    -> insert into Cust set id=new.id,name=new.name,address=new.address,city=new.city,ph_no=new.ph_no;
+    -> end $
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> select * from Customer;
++-------+--------+------------+----------+-----------+
+| id    | name   | address    | city     | ph_no     |
++-------+--------+------------+----------+-----------+
+| 10000 | ameena | ekm        | kochi    | 542845697 |
+| 10001 | amrith | edappally  | kakkanad |      NULL |
+| 10002 | aysha  | koduvally  | calicut  |      NULL |
+| 10003 | jovina | ottapalam  | palakkad | 548741554 |
+| 10004 | linto  | thalassery | kannur   | 947257412 |
+| 10005 | jaseem | attingal   | tvm      | 548741554 |
+| 10006 | aysha  | chu        | kochi    | 542995697 |
+| 10007 | aswin  | thp        | kochi    | 542995600 |
+| 10008 | roshan | pnp        | kochi    | 542995601 |
++-------+--------+------------+----------+-----------+
+
+mysql> update Customer set name='shahma' where id=10000 $
+Query OK, 0 rows affected (0.10 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> select * from Cust $
++-------+--------+---------+-------+-----------+
+| id    | name   | address | city  | ph_no     |
++-------+--------+---------+-------+-----------+
+| 10000 | shahma | ekm     | kochi | 542845697 |
++-------+--------+---------+-------+-----------+
+1 row in set (0.00 sec)
+
+2.Create a trigger to handle inserts to the product relation ( if price < 5 the set price to 10).
+
+mysql> delimiter $
+mysql> create trigger new_pr
+    -> before insert on Product for each row begin
+    -> if new.price<5 then set new.price=10;
+    -> end if;
+    -> end $
+
+Query OK, 0 rows affected (0.19 sec)
+
+mysql> insert into Product values(20005,'eraser',10) $
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select * from Product$
++-------+--------+-------+
+| pid   | name   | price |
++-------+--------+-------+
+| 20000 | pen    |    92 |
+| 20001 | bag    |   102 |
+| 20002 | toy    |   112 |
+| 20003 | soap   |    56 |
+| 20004 | pencil |   148 |
+| 20005 | eraser |    10 |
++-------+--------+-------+
+6 rows in set (0.00 sec)
+
+
