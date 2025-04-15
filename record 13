@@ -1,0 +1,68 @@
+1.Write a MongoDB query to display the customer documents having city ‘ekm’,’tvm’.
+
+ans)INVOICE> db.Customer.find({ street:{ $in: ["kozhikode","ekm"] } });
+[
+  {
+    _id: ObjectId('67fe29ea28b481be31e43269'),
+    id: 1,
+    name: 'ameena',
+    email: 'ameena@gmail.com',
+    phone: '1234556788',
+    street: 'kozhikode'
+  },
+  {
+    _id: ObjectId('67fe29ea28b481be31e4326a'),
+    id: 2,
+    name: 'aysha',
+    email: 'aysha@gmail.com',
+    phone: '838673890',
+    street: 'ekm'
+  }
+]
+
+2.Write a MongoDB query to display all product documents their price >50.
+
+INVOICE> db.Product.find({price: {$gt: 50 } });
+[
+  {
+    _id: ObjectId('67fe2aa128b481be31e4326c'),
+    pid: 1,
+    name: 'toy',
+    price: 100
+  },
+  {
+    _id: ObjectId('67fe2aa128b481be31e4326d'),
+    pid: 2,
+    name: 'pen',
+    price: 200
+  },
+  {
+    _id: ObjectId('67fe2aa128b481be31e4326e'),
+    pid: 3,
+    name: 'soap',
+    price: 300
+  }
+]
+
+3.Write a MongoDB query to find customer documents who not live in ‘tvm’.
+
+INVOICE> db.Customer.find({street: {$ne: "tvm" } });
+[
+  {
+    _id: ObjectId('67fe29ea28b481be31e43269'),
+    id: 1,
+    name: 'ameena',
+    email: 'ameena@gmail.com',
+    phone: '1234556788',
+    street: 'kozhikode'
+  },
+  {
+    _id: ObjectId('67fe29ea28b481be31e4326a'),
+    id: 2,
+    name: 'aysha',
+    email: 'aysha@gmail.com',
+    phone: '838673890',
+    street: 'ekm'
+  }
+]
+
