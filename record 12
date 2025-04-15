@@ -1,0 +1,117 @@
+1.Write a MongoDB query to create an INVOICE database and collections (CUSTOMER, PRODUCT) and its corresponding documents.
+
+ans)test> use INVOICE
+switched to db INVOICE
+INVOICE> db.Customer.insertMany([{id:1,name:"ameena",email:"ameena@gmail.com",phone:"1234556788",street:"tvm"},{id:2,name:"aysha",email:"aysha@gmail.com",phone:"838673890",street:"ekm"},{id:3,name:"rashika",email:"rashika@gmail.com",phone:"7284672498",street:"tir"
+... }]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('67fe29ea28b481be31e43269'),
+    '1': ObjectId('67fe29ea28b481be31e4326a'),
+    '2': ObjectId('67fe29ea28b481be31e4326b')
+  }
+}
+INVOICE> db.Product.insertMany([{ pid: 1, name: "toy",price:100 }, { pid: 2, name: "pen", price:200 }, { pid: 3, name: "soap", price:300 }]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('67fe2aa128b481be31e4326c'),
+    '1': ObjectId('67fe2aa128b481be31e4326d'),
+    '2': ObjectId('67fe2aa128b481be31e4326e')
+  }
+}
+
+2.Write a MongoDB query to find all documents from the collection CUSTOMER
+
+ans)INVOICE> db.Customer.find();
+[
+  {
+    _id: ObjectId('67fe29ea28b481be31e43269'),
+    id: 1,
+    name: 'ameena',
+    email: 'ameena@gmail.com',
+    phone: '1234556788',
+    street: 'tvm'
+  },
+  {
+    _id: ObjectId('67fe29ea28b481be31e4326a'),
+    id: 2,
+    name: 'aysha',
+    email: 'aysha@gmail.com',
+    phone: '838673890',
+    street: 'ekm'
+  },
+  {
+    _id: ObjectId('67fe29ea28b481be31e4326b'),
+    id: 3,
+    name: 'rashika',
+    email: 'rashika@gmail.com',
+    phone: '7284672498',
+    street: 'tir'
+  }
+]
+3.Write a MongoDB query to update the city in the collection CUSTOMER.
+
+ans)INVOICE> db.Customer.updateMany({street:"tvm"},{$set:{street:"kozhikode"}});
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+INVOICE> db.Customer.find();
+[
+  {
+    _id: ObjectId('67fe29ea28b481be31e43269'),
+    id: 1,
+    name: 'ameena',
+    email: 'ameena@gmail.com',
+    phone: '1234556788',
+    street: 'kozhikode'
+  },
+  {
+    _id: ObjectId('67fe29ea28b481be31e4326a'),
+    id: 2,
+    name: 'aysha',
+    email: 'aysha@gmail.com',
+    phone: '838673890',
+    street: 'ekm'
+  },
+  {
+    _id: ObjectId('67fe29ea28b481be31e4326b'),
+    id: 3,
+    name: 'rashika',
+    email: 'rashika@gmail.com',
+    phone: '7284672498',
+    street: 'tir'
+  }
+]
+
+4.Write a MongoDB query to delete the first matched document whose city is “tir”.
+
+ans)INVOICE> db.Customer.deleteOne({street:"tir"});
+{ acknowledged: true, deletedCount: 1 }
+INVOICE> db.Customer.find();
+[
+  {
+    _id: ObjectId('67fe29ea28b481be31e43269'),
+    id: 1,
+    name: 'ameena',
+    email: 'ameena@gmail.com',
+    phone: '1234556788',
+    street: 'kozhikode'
+  },
+  {
+    _id: ObjectId('67fe29ea28b481be31e4326a'),
+    id: 2,
+    name: 'aysha',
+    email: 'aysha@gmail.com',
+    phone: '838673890',
+    street: 'ekm'
+  }
+]
+
+
+
