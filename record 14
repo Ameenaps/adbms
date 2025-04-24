@@ -1,0 +1,86 @@
+1.Write a MongoDB query to sort customer details in ascending order of their name.
+2.Write a MongoDB query to count number of customers in each city.
+3.Write a MongoDB query to find minimum and maximum age in each city.
+4.Write a MongoDB query using the $match stage to retrieve all customer documents whose customer_name starts with the letter “S”.
+5.Write a query using $lookup to join CUSTOMER and PRODUCT collections and display only customer name, product name, and price.
+
+ans1)INVOICE> db.Customer.find().sort({name:1})
+[
+  {
+    _id: ObjectId('67fe29ea28b481be31e43269'),
+    id: 1,
+    name: 'ameena',
+    email: 'ameena@gmail.com',
+    phone: '1234556788',
+    street: 'kozhikode'
+  },
+  {
+    _id: ObjectId('67fe29ea28b481be31e4326a'),
+    id: 2,
+    name: 'aysha',
+    email: 'aysha@gmail.com',
+    phone: '838673890',
+    street: 'ekm'
+  }
+]
+
+ans2)INVOICE> db.Customer.aggregate([
+... {
+... $group: {
+... _id:"$street",
+... totalcustomerCount: { $sum: 1 }
+... }
+... }
+... ])
+[
+  { _id: 'kozhikode', totalcustomerCount: 1 },
+  { _id: 'ekm', totalcustomerCount: 1 }
+]
+
+ans3)INVOICE> db.Customer.aggregate([
+... {
+... $group: {
+... _id: "$street",
+... minAge: { $min: "$age" },
+... maxAge: { $max: "$age" }
+... }
+... }
+... ]);
+[
+  { _id: 'ekm', minAge: 30, maxAge: 30 },
+  { _id: 'kozhikode', minAge: 20, maxAge: 20 }
+]
+
+ans4)INVOICE> db.Customer.find({
+... name:{$regex:/S/}
+... });
+[
+  {
+    _id: ObjectId('680a03fe4ffd9fb693e43269'),
+    id: 3,
+    name: 'Sreya',
+    email: 'Sreya@gmail.com',
+    phone: '2354754214',
+    street: 'thrissur',
+    age: 40
+  }
+]
+
+ans5)INVOICE> db.Customer.aggregate([ { $lookup:{ from:"Product", localField:"p_id", foreignField:"p_id", as:"product_info" } }, { $unwind:"$product_info" }, { $project:{ _id:0, customer_name:"$name", product_name:"$product_info.name", price:"product_info.price" } } ]);
+[
+  {
+    customer_name: 'ameena',
+    product_name: 'toy',
+    price: 'product_info.price'
+  },
+{
+    customer_name: 'aysha',
+    product_name: 'pen',
+    price: 'product_info.price'
+  },
+{
+    customer_name: 'Sreya',
+    product_name: 'soap',
+    price: 'product_info.price'
+  }
+
