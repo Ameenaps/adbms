@@ -84,3 +84,4 @@ ans5)INVOICE> db.Customer.aggregate([ { $lookup:{ from:"Product", localField:"p_
     price: 'product_info.price'
   }
 
+//VERIFIED
