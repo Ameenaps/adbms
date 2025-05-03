@@ -1,0 +1,411 @@
+PART A: Creating Collection and Inserting Documents
+Create a database named collegeDB.
+Create a collection named students.
+Insert at least 5 student documents with the following fields:
+ _id (auto or manual)
+ name
+ age
+ department
+ marks (object with math, science, english)
+ admissionYear
+
+ans)test> use collegeDB
+switched to db collegeDB
+collegeDB> db.Student.insertMany([{id:1,name:"rashika",age:20,department:"cs",marks:{math:60,science:40,english:55},admissionYear:2011 },{id:2,name:"aysha",age:21,department:"civil",marks:{math:50,science:45,english:56},admissionYear:2012 },{id:3,name:"ameena",age:22,department:"commerce",marks:{math:52,science:44,english:56},admissionYear:2013 },{id:4,name:"jovina",age:23,department:"mca",marks:{math:40,science:51,english:66},admissionYear:2017},{id:5,name:"shahma",age:19,department:"mba",marks:{math:38,science:70,english:67},admissionYear:2016  }]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6815b42aa844a3f5d3e43269'),
+    '1': ObjectId('6815b42aa844a3f5d3e4326a'),
+    '2': ObjectId('6815b42aa844a3f5d3e4326b'),
+    '3': ObjectId('6815b42aa844a3f5d3e4326c'),
+    '4': ObjectId('6815b42aa844a3f5d3e4326d')
+  }
+}
+
+PART B: CRUD Operations
+1. Display all documents in the students collection.
+2. Display students whose department is "cs".
+3. Update the age of a student named "jovina" to 21.
+4. Add a new field attendance: 95 to the student named "jovina".
+5. Delete a student document where the name is "shahma".
+
+ans1)collegeDB> db.Student.find();
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e43269'),
+    id: 1,
+    name: 'rashika',
+    age: 20,
+    department: 'cs',
+    marks: { math: 60, science: 40, english: 55 },
+    admissionYear: 2011
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326a'),
+    id: 2,
+    name: 'aysha',
+    age: 21,
+    department: 'civil',
+    marks: { math: 50, science: 45, english: 56 },
+    admissionYear: 2012
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326b'),
+    id: 3,
+    name: 'ameena',
+    age: 22,
+    department: 'commerce',
+    marks: { math: 52, science: 44, english: 56 },
+    admissionYear: 2013
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326c'),
+    id: 4,
+    name: 'jovina',
+    age: 23,
+    department: 'mca',
+    marks: { math: 40, science: 51, english: 66 },
+    admissionYear: 2017
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326d'),
+    id: 5,
+    name: 'shahma',
+    age: 19,
+    department: 'mba',
+    marks: { math: 38, science: 70, english: 67 },
+    admissionYear: 2016
+  }
+]
+
+ans2)collegeDB> db.Student.find({department:"cs"})
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e43269'),
+    id: 1,
+    name: 'rashika',
+    age: 20,
+    department: 'cs',
+    marks: { math: 60, science: 40, english: 55 },
+    admissionYear: 2011
+  }
+]
+
+ans3)collegeDB> db.Student.updateOne({ name:"jovina"},{ $set: {age:21} } )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+collegeDB> db.Student.find({name:"jovina"})
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326c'),
+    id: 4,
+    name: 'jovina',
+    age: 21,
+    department: 'mca',
+    marks: { math: 40, science: 51, english: 66 },
+    admissionYear: 2017
+  }
+] 
+
+ans4)collegeDB> db.Student.updateOne({ name:"jovina"},{$set:{attendance:95} } )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+collegeDB> db.Student.find({name:"jovina"})
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326c'),
+    id: 4,
+    name: 'jovina',
+    age: 21,
+    department: 'mca',
+    marks: { math: 40, science: 51, english: 66 },
+    admissionYear: 2017,
+    attendance: 95
+  }
+]
+
+ans5)collegeDB> db.Student.deleteOne({name:"shahma" } );
+{ acknowledged: true, deletedCount: 1 }
+collegeDB> db.Student.find();
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e43269'),
+    id: 1,
+    name: 'rashika',
+    age: 20,
+    department: 'cs',
+    marks: { math: 60, science: 40, english: 55 },
+    admissionYear: 2011
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326a'),
+    id: 2,
+    name: 'aysha',
+    age: 21,
+    department: 'civil',
+    marks: { math: 50, science: 45, english: 56 },
+    admissionYear: 2012
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326b'),
+    id: 3,
+    name: 'ameena',
+    age: 22,
+    department: 'commerce',
+    marks: { math: 52, science: 44, english: 56 },
+    admissionYear: 2013
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326c'),
+    id: 4,
+    name: 'jovina',
+    age: 21,
+    department: 'mca',
+    marks: { math: 40, science: 51, english: 66 },
+    admissionYear: 2017,
+    attendance: 95
+  }
+]
+
+Part C: Data Retrieval with Conditions
+1. Retrieve names of students who scored more than 55 in math.
+2. List students admitted in the year 2012.
+3. Display students sorted by name in ascending order.
+4. Count the number of students in each department.
+
+ans1)collegeDB> db.Student.find({"marks.math":{$gt:55}});
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e43269'),
+    id: 1,
+    name: 'rashika',
+    age: 20,
+    department: 'cs',
+    marks: { math: 60, science: 40, english: 55 },
+    admissionYear: 2011
+  }
+]
+
+ans2)collegeDB> db.Student.find({admissionYear:2012});
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326a'),
+    id: 2,
+    name: 'aysha',
+    age: 21,
+    department: 'civil',
+    marks: { math: 50, science: 45, english: 56 },
+    admissionYear: 2012
+  }
+]
+
+ans3)collegeDB> db.Student.find().sort({name:1});
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326b'),
+    id: 3,
+    name: 'ameena',
+    age: 22,
+    department: 'commerce',
+    marks: { math: 52, science: 44, english: 56 },
+    admissionYear: 2013
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326a'),
+    id: 2,
+    name: 'aysha',
+    age: 21,
+    department: 'civil',
+    marks: { math: 50, science: 45, english: 56 },
+    admissionYear: 2012
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326c'),
+    id: 4,
+    name: 'jovina',
+    age: 21,
+    department: 'mca',
+    marks: { math: 40, science: 51, english: 66 },
+    admissionYear: 2017,
+    attendance: 95
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e43269'),
+    id: 1,
+    name: 'rashika',
+    age: 20,
+    department: 'cs',
+    marks: { math: 60, science: 40, english: 55 },
+    admissionYear: 2011
+  }
+]
+
+ans4)collegeDB> db.Student.aggregate([{$group:{_id:"$department",count:{$sum:1}}}])
+[
+  { _id: 'commerce', count: 1 },
+  { _id: 'mca', count: 1 },
+  { _id: 'cs', count: 1 },
+  { _id: 'civil', count: 1 }
+]
+
+Part D: Aggregation
+1. Use $project to display only name and total marks (sum of all subjects).
+2. Use $match and $group to calculate the average math marks department-wise.
+3. Use $sort to display students based on their science marks in descending order.
+4. Use $lookup to join students with a new collection named internships, and display:
+name, department, internship_company, and duration
+(Assume students.student_id = internships.student_id)
+
+ans1)collegeDB> db.Student.aggregate([ { $project: { name: 1, totalMarks: { $sum: ["$marks.math", "$marks.science", "$marks.english"] } } }] )
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e43269'),
+    name: 'rashika',
+    totalMarks: 155
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326a'),
+    name: 'aysha',
+    totalMarks: 151
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326b'),
+    name: 'ameena',
+    totalMarks: 152
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326c'),
+    name: 'jovina',
+    totalMarks: 157
+  }
+]
+
+ans2)collegeDB> db.Student.aggregate([
+...    { $match: { "marks.math": { $exists: true } } },
+...    {
+...      $group: {
+...        _id: "$department",
+...        avgMath: { $avg: "$marks.math" }
+...      }
+...  } ])
+[
+  { _id: 'commerce', avgMath: 52 },
+  { _id: 'mca', avgMath: 40 },
+  { _id: 'cs', avgMath: 60 },
+  { _id: 'civil', avgMath: 50 }
+]
+
+ANS3)collegeDB> db.Student.find().sort({ "marks.science": -1 })
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326c'),
+    id: 4,
+    name: 'jovina',
+    age: 21,
+    department: 'mca',
+    marks: { math: 40, science: 51, english: 66 },
+    admissionYear: 2017,
+    attendance: 95
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326a'),
+    id: 2,
+    name: 'aysha',
+    age: 21,
+    department: 'civil',
+    marks: { math: 50, science: 45, english: 56 },
+    admissionYear: 2012
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326b'),
+    id: 3,
+    name: 'ameena',
+    age: 22,
+    department: 'commerce',
+    marks: { math: 52, science: 44, english: 56 },
+    admissionYear: 2013
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e43269'),
+    id: 1,
+    name: 'rashika',
+    age: 20,
+    department: 'cs',
+    marks: { math: 60, science: 40, english: 55 },
+    admissionYear: 2011
+  }
+]
+
+ans4)collegeDB> db.internships.insertMany([
+...    { student_id: 1, internship_company: "Google", duration: "3 months" },
+...    { student_id: 3, internship_company: "Amazon", duration: "2 months" },
+...    { student_id: 4, internship_company: "Meta", duration: "4 months" }
+...  ])
+... 
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6815c23ba844a3f5d3e4326e'),
+    '1': ObjectId('6815c23ba844a3f5d3e4326f'),
+    '2': ObjectId('6815c23ba844a3f5d3e43270')
+  }
+}
+
+collegeDB> db.Student.aggregate([
+...    {
+...      $lookup: {
+...        from: "internships",
+...         localField: "id",
+...         foreignField: "student_id",
+...         as: "internshipInfo"
+...       }
+...     },
+...     { $unwind: "$internshipInfo" },
+...     {
+...       $project: {
+...         name: 1,
+...         department: 1,
+...       internship_company: "$internshipInfo.internship_company",
+...         duration: "$internshipInfo.duration"
+...       }
+...     }
+...   ]);
+... 
+[
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e43269'),
+    name: 'rashika',
+    department: 'cs',
+    internship_company: 'Google',
+    duration: '3 months'
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326b'),
+    name: 'ameena',
+    department: 'commerce',
+    internship_company: 'Amazon',
+    duration: '2 months'
+  },
+  {
+    _id: ObjectId('6815b42aa844a3f5d3e4326c'),
+    name: 'jovina',
+    department: 'mca',
+    internship_company: 'Meta',
+    duration: '4 months'
+  }
+]
+collegeDB> 
+
+
+
